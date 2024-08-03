@@ -118,15 +118,130 @@ for word in words:
 
 
 ```
-## Ejecución
+
+## Crear Tarjetas de Anki
+El siguiente script crea un mazo de Anki con las palabras y los archivos de audio generados, usando el paquete genanki.
+### Ejecución
 - Asegúrate de que el archivo series.txt esté en el mismo directorio que los scripts.
 - Ejecuta el script de procesamiento del archivo de texto para generar translations.txt.
 - Ejecuta el script de generación de archivos de audio para crear los archivos MP3 en la carpeta audio_files.
+```python
+import pandas as pd
+import genanki
+import os
+
+# Leer el archivo de Excel
+df = pd.read_excel('flashcards.xlsx')
+
+# Crear un modelo para las tarjetas con audio y estilo mejorado
+model = genanki.Model(
+    1607392319,
+    'Elegant Model with Audio',
+    fields=[
+        {'name': 'Español'},
+        {'name': 'Inglés'},
+        {'name': 'Audio'},
+    ],
+    templates=[
+        {
+            'name': 'Card 1',
+            'qfmt': '''
+                <div class="card-container">
+                    <div class="card">
+                        <div class="content">
+                            <h2>{{Español}}</h2>
+                        </div>
+                    </div>
+                </div>
+            ''',
+            'afmt': '''
+                <div class="card-container">
+                    <div class="card">
+                        <div class="content">
+                            <h2>{{Inglés}}</h2>
+                            <div class="audio-container">
+                                {{Audio}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ''',
+        },
+    ],
+    css="""
+    .card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #222;
+        padding: 20px;
+    }
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        background-color: #333;
+        border: 2px solid #555;
+        border-radius: 8px;
+        padding: 3vw;
+        max-width: 600px;
+        width: 80%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        transition: opacity 0.5s ease-in-out;
+        text-align: center;
+    }
+    .content h2 {
+        font-size: 5vw;
+        margin: 0;
+    }
+    .audio-container {
+        margin-top: 2vw;
+    }
+    .audio-container audio {
+        width: 100%;
+        max-width: 300px;
+        display: block;
+        margin: 0 auto;
+    }
+    .card:hover {
+        opacity: 0.9;
+    }
+    """,
+)
+
+# Crear el mazo
+deck = genanki.Deck(
+    2059400110,
+    'Mi Mazo Elegante con Audio')
+
+# Añadir las tarjetas al mazo
+for index, row in df.iterrows():
+    audio_file = f"{row['Palabra en inglés']}.mp3"
+    audio_path = f"audio_files/{audio_file}"
+    
+    if os.path.exists(audio_path):
+        note = genanki.Note(
+            model=model,
+            fields=[row['Traducción en español'], row['Palabra en inglés'], f"[sound:{audio_file}]"]
+        )
+        deck.add_note(note)
+
+# Crear el paquete y añadir los archivos de audio
+package = genanki.Package(deck)
+package.media_files = [f"audio_files/{row['Palabra en inglés']}.mp3" for index, row in df.iterrows()]
+
+# Guardar el mazo en un archivo .apkg
+package.write_to_file('mi_mazo_elegante_con_audio.apkg')
+
+print("El mazo de Anki ha sido creado exitosamente.")
+
+```
 
 ## Notas
 El archivo series.txt debe contener traducciones en formato de tabulaciones.
 El script ignora las líneas que comienzan con #.
 Asegúrate de que los nombres de los archivos de audio generados sean válidos en tu sistema operativo.
+Ejecuta el script de creación de tarjetas de Anki para generar el mazo de Anki.
 
 ## Desarrolladores
 
