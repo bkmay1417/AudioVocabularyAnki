@@ -125,6 +125,7 @@ El siguiente script crea un mazo de Anki con las palabras y los archivos de audi
 - Asegúrate de que el archivo series.txt esté en el mismo directorio que los scripts.
 - Ejecuta el script de procesamiento del archivo de texto para generar translations.txt.
 - Ejecuta el script de generación de archivos de audio para crear los archivos MP3 en la carpeta audio_files.
+
 ```python
 import pandas as pd
 import genanki
