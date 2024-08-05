@@ -1,5 +1,9 @@
 # AudioVocabularyAnki
 
+<div style="display: flex; align-items: center;">
+    <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green" />
+</div>
+
 Este proyecto procesa un archivo de texto con traducciones, extrae las traducciones, las guarda en un archivo de texto y luego genera archivos de audio para cada traducción utilizando la API de Google Text-to-Speech (gTTS).
 
 ## Requisitos
