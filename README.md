@@ -21,7 +21,7 @@ pip install pandas gtts
 - series.txt: Archivo de texto que contiene las traducciones.
 - translations.txt: Archivo generado que contiene solo la columna de traducciones.
 - audio_files/: Carpeta generada que contiene los archivos de audio en formato MP3.
-- 
+
 ## Uso
 Procesar el Archivo de Texto
 El script procesa el archivo series.txt y extrae las traducciones, guardándolas en translations.txt.
